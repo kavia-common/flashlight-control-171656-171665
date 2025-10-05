@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Flashlight</string>
+    <string name="turn_on">Turn ON</string>
+    <string name="turn_off">Turn OFF</string>
+    <string name="flash_on">Flashlight is ON</string>
+    <string name="flash_off">Flashlight is OFF</string>
+    <string name="permission_required">Camera permission required to control flashlight</string>
+    <string name="no_flash_msg">No flashlight available on this device</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="unable_control">Unable to control flashlight: %1$s</string>
+</resources>
