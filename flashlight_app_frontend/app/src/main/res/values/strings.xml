@@ -9,4 +9,23 @@
     <string name="no_flash_msg">No flashlight available on this device</string>
     <string name="unavailable">Unavailable</string>
     <string name="unable_control">Unable to control flashlight: %1$s</string>
+
+    <!-- About & Settings -->
+    <string name="menu_about">About</string>
+    <string name="about_title">About</string>
+    <string name="about_description">A minimal flashlight app using the device torch with a modern Ocean theme.</string>
+    <string name="about_section_more">More</string>
+
+    <!-- Version -->
+    <string name="version_label">v%1$s</string>
+    <string name="version_label_placeholder">v1.0</string>
+
+    <!-- Privacy -->
+    <string name="privacy_title">Privacy Policy</string>
+    <string name="privacy_summary">We do not collect personal data. Camera permission is used only to control the flashlight.</string>
+    <string name="privacy_content_attribution">Local content (no network).</string>
+    <string name="contact_email_placeholder">contact@example.com</string>
+
+    <!-- Licenses -->
+    <string name="licenses_title">Open Source Licenses</string>
 </resources>

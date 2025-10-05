@@ -10,6 +10,8 @@ This is a simple Android flashlight application that provides a single, centered
 - Live torch state updates using CameraManager.TorchCallback to keep the UI consistent with system torch state.
 - Portrait-only orientation with minimal UI and subtle fade animations to reinforce state changes.
 - AppCompat/Material-friendly approach with an “Ocean Professional” palette.
+- About screen with app version info and links to Privacy Policy and Open Source Licenses.
+- In-app Privacy Policy and Open Source Licenses pages rendered locally (no network).
 
 ## Design Theme (Ocean Professional)
 The UI follows a modern, minimalist aesthetic with rounded shapes, subtle shadows, and smooth transitions.
@@ -28,8 +30,21 @@ Implementation details:
 - Background: Subtle gradient surface background (res/drawable/bg_surface.xml).
 - Button: Large circular toggle button with ocean colors and selected state (res/drawable/bg_button_ocean.xml).
 - Icons: Vector drawables for flash on/off (res/drawable/ic_flash_on_24.xml, res/drawable/ic_flash_off_24.xml).
-- Layout: activity_main.xml centers the icon, button, and status text using ConstraintLayout.
+- Layouts: activity_main.xml (main UI), activity_about.xml (About), activity_privacy.xml (Privacy), activity_licenses.xml (Licenses).
 - Animations: Subtle fade-in/fade-out animations on toggle (res/anim/fade_in.xml, res/anim/fade_out.xml).
+
+## About, Privacy, and Licenses
+- About screen: Shows app name, short description, and version (from BuildConfig.VERSION_NAME), with links to Privacy Policy and Open Source Licenses.
+- Privacy Policy: Local HTML at res/raw/privacy_policy.html rendered via a WebView with restricted settings (no JavaScript, no file/network access).
+- Open Source Licenses: Local HTML at res/raw/open_source_licenses.html rendered via a WebView with restricted settings.
+
+Navigation entry point:
+- MainActivity includes an overflow menu with an “About” item to open the About screen.
+
+Privacy stance:
+- The app does not collect personal data and does not transmit data off-device.
+- Camera permission is requested only to control the flashlight (torch) via CameraManager.setTorchMode.
+- The privacy and license pages are bundled locally—no internet access required.
 
 ## Permissions and Privacy
 - Required permissions:
