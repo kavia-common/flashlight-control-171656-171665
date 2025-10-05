@@ -10,6 +10,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.HapticFeedbackConstants
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
@@ -55,6 +57,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun prefs() = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
+    private fun isKeepScreenOnEnabled(): Boolean = prefs().getBoolean(SettingsActivity.KEY_KEEP_SCREEN_ON, false)
+    private fun isHapticEnabled(): Boolean = prefs().getBoolean(SettingsActivity.KEY_HAPTIC_FEEDBACK, false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -78,6 +84,9 @@ class MainActivity : AppCompatActivity() {
                 requestCameraPermission()
             } else {
                 toggleTorch()
+                if (isHapticEnabled()) {
+                    toggleButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                }
             }
         }
 
@@ -88,6 +97,9 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             cameraManager.registerTorchCallback(torchCallback, null)
         }
+
+        // Apply keep-screen-on if user enabled and torch currently on
+        applyKeepScreenOnFlag(isTorchOn)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -106,6 +118,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(android.content.Intent(this, AboutActivity::class.java))
                 true
             }
+            R.id.action_settings -> {
+                startActivity(android.content.Intent(this, SettingsActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -117,6 +133,8 @@ class MainActivity : AppCompatActivity() {
         }
         // Ensure torch off when leaving to be safe
         setTorch(false)
+        // Clear keep screen on
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun hasCameraPermission(): Boolean =
@@ -141,6 +159,8 @@ class MainActivity : AppCompatActivity() {
         try {
             cameraManager.setTorchMode(id, enable)
             isTorchOn = enable
+            // Apply/clear keep-screen-on depending on user setting and state
+            applyKeepScreenOnFlag(isTorchOn)
             updateVisuals()
         } catch (e: Exception) {
             Toast.makeText(this, getString(R.string.unable_control, e.message ?: ""), Toast.LENGTH_LONG).show()
@@ -155,6 +175,15 @@ class MainActivity : AppCompatActivity() {
             iconView.setImageResource(R.drawable.ic_flash_off_24)
         }
         updateVisuals()
+    }
+
+    private fun applyKeepScreenOnFlag(torchOn: Boolean) {
+        val enabledByUser = isKeepScreenOnEnabled()
+        if (torchOn && enabledByUser) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
     }
 
     private fun updateVisuals() {

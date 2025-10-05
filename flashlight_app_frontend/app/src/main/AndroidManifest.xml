@@ -53,5 +53,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.example.app.MainActivity"/>
         </activity>
+
+        <activity
+            android:name="org.example.app.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName="org.example.app.MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.example.app.MainActivity"/>
+        </activity>
     </application>
 </manifest>

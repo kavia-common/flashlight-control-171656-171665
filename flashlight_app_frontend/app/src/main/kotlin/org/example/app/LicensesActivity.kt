@@ -1,6 +1,8 @@
 package org.example.app
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
@@ -34,5 +36,20 @@ class LicensesActivity : AppCompatActivity() {
 
         val html = resources.openRawResource(R.raw.open_source_licenses).bufferedReader().use { it.readText() }
         webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_simple_settings, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                startActivity(android.content.Intent(this, SettingsActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
