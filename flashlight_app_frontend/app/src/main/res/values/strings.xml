@@ -36,4 +36,28 @@
 
     <!-- Licenses -->
     <string name="licenses_title">Open Source Licenses</string>
+
+    <!-- New Menu Items -->
+    <string name="menu_version">Version</string>
+    <string name="menu_about_flash_app">About Flash App</string>
+    <string name="menu_privacy">Privacy</string>
+    <string name="menu_privacy_notice">Privacy Notice</string>
+    <string name="menu_oss_licenses">Open Source Licenses</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_version_title">Version</string>
+    <string name="dialog_version_body">App version: %1$s</string>
+    <string name="dialog_about_title">About Flash App</string>
+    <string name="dialog_about_body">A simple app to toggle your device flashlight.</string>
+
+    <!-- Placeholder screens -->
+    <string name="privacy_screen_title">Privacy Policy</string>
+    <string name="privacy_notice_screen_title">Privacy Notice</string>
+    <string name="oss_licenses_screen_title">Open Source Licenses</string>
+    <string name="placeholder_section_data_collection">Data Collection</string>
+    <string name="placeholder_section_usage">Usage</string>
+    <string name="placeholder_section_contact">Contact</string>
+    <string name="placeholder_lorem">This is placeholder content. Replace with your actual policy text.</string>
+    <string name="placeholder_oss_note">This list is illustrative and will be updated dynamically later.</string>
 </resources>

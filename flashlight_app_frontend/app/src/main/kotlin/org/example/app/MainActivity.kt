@@ -18,8 +18,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import android.view.View
+import android.widget.PopupMenu
 
 // PUBLIC_INTERFACE
 /**
@@ -65,6 +69,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Setup AppBar / Toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = getString(R.string.app_name)
+
+        val overflowLeft: ImageView = findViewById(R.id.overflowLeft)
+        overflowLeft.setOnClickListener { v ->
+            showLeftOverflowMenu(v)
+        }
+
         toggleButton = findViewById(R.id.toggleButton)
         iconView = findViewById(R.id.iconView)
         statusText = findViewById(R.id.statusText)
@@ -108,6 +122,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Keep existing top-right menu if needed (Settings/About)
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
@@ -124,6 +139,69 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showLeftOverflowMenu(anchor: View) {
+        val popup = PopupMenu(this, anchor)
+        popup.menuInflater.inflate(R.menu.menu_overflow_left, popup.menu)
+        // Replace visible titles from resources to ensure localization
+        popup.menu.findItem(R.id.menu_version)?.title = getString(R.string.menu_version)
+        popup.menu.findItem(R.id.menu_about_app)?.title = getString(R.string.menu_about_flash_app)
+        popup.menu.findItem(R.id.menu_privacy)?.title = getString(R.string.menu_privacy)
+        popup.menu.findItem(R.id.menu_privacy_notice)?.title = getString(R.string.menu_privacy_notice)
+        popup.menu.findItem(R.id.menu_oss_licenses)?.title = getString(R.string.menu_oss_licenses)
+
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_version -> {
+                    showVersionDialog()
+                    true
+                }
+                R.id.menu_about_app -> {
+                    showAboutDialog()
+                    true
+                }
+                R.id.menu_privacy -> {
+                    // Navigate to existing PrivacyActivity (WebView page)
+                    startActivity(android.content.Intent(this, PrivacyActivity::class.java))
+                    true
+                }
+                R.id.menu_privacy_notice -> {
+                    // Navigate to placeholder Privacy Notice screen
+                    startActivity(android.content.Intent(this, PrivacyNoticeActivity::class.java))
+                    true
+                }
+                R.id.menu_oss_licenses -> {
+                    // Navigate to placeholder OSS list screen
+                    startActivity(android.content.Intent(this, OssListActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
+    }
+
+    private fun showVersionDialog() {
+        val versionName = try {
+            val pInfo = packageManager.getPackageInfo(packageName, 0)
+            pInfo.versionName ?: "1.0"
+        } catch (e: Exception) {
+            "1.0"
+        }
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.dialog_version_title))
+            .setMessage(getString(R.string.dialog_version_body, versionName))
+            .setPositiveButton(getString(R.string.dialog_ok), null)
+            .show()
+    }
+
+    private fun showAboutDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.dialog_about_title))
+            .setMessage(getString(R.string.dialog_about_body))
+            .setPositiveButton(getString(R.string.dialog_ok), null)
+            .show()
     }
 
     override fun onDestroy() {
